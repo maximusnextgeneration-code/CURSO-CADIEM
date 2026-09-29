@@ -114,7 +114,7 @@ footer{text-align:center;font-size:12px;color:var(--muted);padding:0 16px calc(2
   <div class="wrap">
     <div class="brand-mark">C</div>
     <div class="brand-txt"><small>Curso Cadiem 2026</small><strong id="hdrTitle">Evaluaciones</strong></div>
-    <button class="home-btn" id="homeBtn" hidden>Módulos</button>
+    <button class="home-btn" id="homeBtn" hidden>Temas</button>
   </div>
   <div class="progress" id="prog" hidden><i id="progBar"></i></div>
 </header>
@@ -124,7 +124,7 @@ footer{text-align:center;font-size:12px;color:var(--muted);padding:0 16px calc(2
 <script>
 const MODULES = {
   m1: {
-    num: "1", title: "Economía & Mercados",
+    num: "1", when: "Viernes 2/10 · 9:30 h", title: "Economía & Mercados",
     questions: [
       {
         q: "Según la ecuación PIB = C + I + G + X − M, ¿qué efecto tiene sobre el PIB que un país registre déficit comercial?",
@@ -173,58 +173,8 @@ const MODULES = {
       }
     ]
   },
-  m2: {
-    num: "2", title: "Acciones",
-    questions: [
-      {
-        q: "Si una empresa quiebra y se liquida, ¿en qué lugar de la prioridad de cobro están los accionistas ordinarios?",
-        o: ["Primeros, porque son los dueños de la empresa",
-            "Después de los bonistas senior, pero antes que los bonistas subordinados",
-            "Últimos, después de todos los acreedores",
-            "Cobran en igualdad de condiciones que los bonistas"],
-        a: 2,
-        e: "El accionista es dueño de la empresa, pero cobra último en una liquidación, después de todos los acreedores. Por eso las acciones son el escalón de mayor riesgo en la estructura de capital."
-      },
-      {
-        q: "Un inversor quiere comprar en Wall Street acciones de Petrobras o de TSMC sin operar en Brasil ni en Taiwán. ¿Qué instrumento usaría?",
-        o: ["Una acción preferida emitida por la propia empresa en EE.UU.",
-            "Un ADR, un certificado emitido por un banco de EE.UU. que representa acciones de una empresa extranjera",
-            "Un ETF sectorial de EE.UU.",
-            "Un bono corporativo convertible"],
-        a: 1,
-        e: "Los ADR (American Depositary Receipts) representan acciones de empresas extranjeras y cotizan en EE.UU. en dólares. Algunos ejemplos son PBR, TSM, ASML e YPF."
-      },
-      {
-        q: "Nike cotiza a US$36,05 y su BPA de los últimos 12 meses es US$2,10, lo que da un P/E de ~17,2x. Su promedio de los últimos 12 meses fue ~29,9x y sus competidores cotizan con múltiplos más bajos. ¿Qué conclusión es correcta?",
-        o: ["Está barata en cualquier comparación, así que conviene comprar",
-            "Está barata frente a su propia historia, pero cotiza con prima frente a sus pares: el P/E depende de contra qué se compare",
-            "Un P/E de 17,2x significa que la acción va a subir 17,2%",
-            "El P/E no sirve para empresas que pagan dividendos"],
-        a: 1,
-        e: "P/E = precio / BPA = 36,05 / 2,10 ≈ 17,2x, es decir, se paga 17 veces el beneficio anual. Está 42% por debajo de su promedio, pero con prima frente a sus pares (adidas, Lululemon, Deckers, On). Por eso la valuación siempre se mira contra la historia y contra los comparables."
-      },
-      {
-        q: "Netflix superó el BPA estimado en su reporte del 2T26, pero la acción cayó más de 7% en la jornada siguiente. ¿Cuál es la explicación más probable?",
-        o: ["El mercado reacciona solo a los ingresos pasados y los ingresos crecieron",
-            "La guía para el trimestre siguiente quedó por debajo del consenso y el mercado ajustó sus expectativas",
-            "Las acciones siempre bajan después de un reporte",
-            "La empresa recompró acciones, lo que diluye a los accionistas"],
-        a: 1,
-        e: "El precio refleja expectativas. Si la guía (lo que la empresa prevé para adelante) decepciona, la acción puede caer aunque el trimestre haya salido en línea o por encima de lo esperado."
-      },
-      {
-        q: "Costco cotiza históricamente con un P/E mucho más alto que Target. ¿Qué lo justifica?",
-        o: ["Costco no tiene deuda y Target sí",
-            "Su modelo de membresías genera ingresos recurrentes, con alta lealtad de clientes y márgenes estables",
-            "Costco paga el dividendo más alto del sector",
-            "Target cotiza en una bolsa con menos liquidez"],
-        a: 1,
-        e: "La recaudación por membresías es un ingreso recurrente y previsible, y la renovación es muy alta. El mercado paga una prima por esa calidad y estabilidad del negocio. Es la idea de Buffett: mejor una empresa extraordinaria a un precio justo."
-      }
-    ]
-  },
   m3: {
-    num: "3", title: "Bonos",
+    num: "2", when: "Viernes 2/10 · 10:30 h", title: "Bonos",
     questions: [
       {
         q: "Una empresa quiebra. ¿Quién tiene prioridad de cobro sobre sus activos?",
@@ -274,7 +224,7 @@ const MODULES = {
     ]
   },
   m4: {
-    num: "4", title: "Fondos Mutuos",
+    num: "3", when: "Viernes 2/10 · 14:30 h", title: "Fondos Mutuos",
     questions: [
       {
         q: "¿Qué representa el NAV (Net Asset Value) de un fondo mutuo?",
@@ -323,8 +273,58 @@ const MODULES = {
       }
     ]
   },
+  m2: {
+    num: "4", when: "Viernes 2/10 · 15:30 h", title: "Acciones",
+    questions: [
+      {
+        q: "Si una empresa quiebra y se liquida, ¿en qué lugar de la prioridad de cobro están los accionistas ordinarios?",
+        o: ["Primeros, porque son los dueños de la empresa",
+            "Después de los bonistas senior, pero antes que los bonistas subordinados",
+            "Últimos, después de todos los acreedores",
+            "Cobran en igualdad de condiciones que los bonistas"],
+        a: 2,
+        e: "El accionista es dueño de la empresa, pero cobra último en una liquidación, después de todos los acreedores. Por eso las acciones son el escalón de mayor riesgo en la estructura de capital."
+      },
+      {
+        q: "Un inversor quiere comprar en Wall Street acciones de Petrobras o de TSMC sin operar en Brasil ni en Taiwán. ¿Qué instrumento usaría?",
+        o: ["Una acción preferida emitida por la propia empresa en EE.UU.",
+            "Un ADR, un certificado emitido por un banco de EE.UU. que representa acciones de una empresa extranjera",
+            "Un ETF sectorial de EE.UU.",
+            "Un bono corporativo convertible"],
+        a: 1,
+        e: "Los ADR (American Depositary Receipts) representan acciones de empresas extranjeras y cotizan en EE.UU. en dólares. Algunos ejemplos son PBR, TSM, ASML e YPF."
+      },
+      {
+        q: "Nike cotiza a US$36,05 y su BPA de los últimos 12 meses es US$2,10, lo que da un P/E de ~17,2x. Su promedio de los últimos 12 meses fue ~29,9x y sus competidores cotizan con múltiplos más bajos. ¿Qué conclusión es correcta?",
+        o: ["Está barata en cualquier comparación, así que conviene comprar",
+            "Está barata frente a su propia historia, pero cotiza con prima frente a sus pares: el P/E depende de contra qué se compare",
+            "Un P/E de 17,2x significa que la acción va a subir 17,2%",
+            "El P/E no sirve para empresas que pagan dividendos"],
+        a: 1,
+        e: "P/E = precio / BPA = 36,05 / 2,10 ≈ 17,2x, es decir, se paga 17 veces el beneficio anual. Está 42% por debajo de su promedio, pero con prima frente a sus pares (adidas, Lululemon, Deckers, On). Por eso la valuación siempre se mira contra la historia y contra los comparables."
+      },
+      {
+        q: "Netflix superó el BPA estimado en su reporte del 2T26, pero la acción cayó más de 7% en la jornada siguiente. ¿Cuál es la explicación más probable?",
+        o: ["El mercado reacciona solo a los ingresos pasados y los ingresos crecieron",
+            "La guía para el trimestre siguiente quedó por debajo del consenso y el mercado ajustó sus expectativas",
+            "Las acciones siempre bajan después de un reporte",
+            "La empresa recompró acciones, lo que diluye a los accionistas"],
+        a: 1,
+        e: "El precio refleja expectativas. Si la guía (lo que la empresa prevé para adelante) decepciona, la acción puede caer aunque el trimestre haya salido en línea o por encima de lo esperado."
+      },
+      {
+        q: "Costco cotiza históricamente con un P/E mucho más alto que Target. ¿Qué lo justifica?",
+        o: ["Costco no tiene deuda y Target sí",
+            "Su modelo de membresías genera ingresos recurrentes, con alta lealtad de clientes y márgenes estables",
+            "Costco paga el dividendo más alto del sector",
+            "Target cotiza en una bolsa con menos liquidez"],
+        a: 1,
+        e: "La recaudación por membresías es un ingreso recurrente y previsible, y la renovación es muy alta. El mercado paga una prima por esa calidad y estabilidad del negocio. Es la idea de Buffett: mejor una empresa extraordinaria a un precio justo."
+      }
+    ]
+  },
   m5: {
-    num: "5", title: "ETFs",
+    num: "5", when: "Viernes 2/10 · 16:30 h", title: "ETFs",
     questions: [
       {
         q: "¿Cuál de estas es una ventaja de un ETF frente a un fondo mutuo tradicional?",
@@ -374,7 +374,7 @@ const MODULES = {
     ]
   },
   m6: {
-    num: "6", title: "Productos Estructurados",
+    num: "6", when: "Sábado 3/10 · 9:00 h", title: "Productos Estructurados",
     questions: [
       {
         q: "Una nota con capital protegido combina un bono cupón cero con una opción. Si las tasas de interés suben, ¿qué pasa con el armado de la nota?",
@@ -386,7 +386,7 @@ const MODULES = {
         e: "Con una tasa mayor, hace falta menos dinero hoy para asegurar el 100% al vencimiento. Por ejemplo, 1.000.000 / 1,045 = 956.900 al 4,5%. El resto (43.100) queda disponible para comprar la opción."
       },
       {
-        q: "La nota Marex 2026 del módulo (worst-of sobre QQQ, IWM y S&P 500) tiene barrera de cupón al 80% y barrera europea de capital al 60%. Al vencimiento: S&P 500 +10%, QQQ −5% e IWM −30%. ¿Qué recibe el inversor?",
+        q: "La nota Marex 2026 vista en clase (worst-of sobre QQQ, IWM y S&P 500) tiene barrera de cupón al 80% y barrera europea de capital al 60%. Al vencimiento: S&P 500 +10%, QQQ −5% e IWM −30%. ¿Qué recibe el inversor?",
         o: ["100% del capital más el cupón, porque dos de los tres subyacentes están por encima del 80%",
             "100% del capital sin cupón, porque el peor (IWM) quedó entre la barrera de capital y la de cupón",
             "70% del capital, porque IWM cayó 30%",
@@ -423,58 +423,8 @@ const MODULES = {
       }
     ]
   },
-  m7: {
-    num: "7", title: "Productos no líquidos",
-    questions: [
-      {
-        q: "¿Por qué un inversor puede esperar un retorno mayor de un fondo de private equity o de crédito privado que de un activo cotizado comparable?",
-        o: ["Porque no tienen riesgo",
-            "Por la prima de iliquidez: se compensa al inversor por inmovilizar su capital durante varios años",
-            "Porque la regulación garantiza un retorno mínimo",
-            "Porque no pagan comisiones"],
-        a: 1,
-        e: "Quien acepta no poder vender su inversión durante años exige una compensación extra: la prima de iliquidez. No está garantizada: depende de la selección del gestor y del ciclo."
-      },
-      {
-        q: "En un fondo de private equity el inversor compromete USD 1.000.000. ¿Cómo se invierte ese dinero, típicamente?",
-        o: ["Se transfiere todo el primer día",
-            "El gestor lo va pidiendo por partes (capital calls) a medida que encuentra inversiones, a lo largo de varios años",
-            "Se invierte en bonos del Tesoro hasta el vencimiento",
-            "El inversor elige cuándo aportar"],
-        a: 1,
-        e: "El compromiso se va llamando en los primeros años del fondo, y las distribuciones llegan más adelante, cuando se venden las inversiones. Por eso hay que prever liquidez para los llamados de capital."
-      },
-      {
-        q: "¿Qué describe la llamada \"curva J\" de un fondo de private equity?",
-        o: ["Retornos altos los primeros años y bajos al final",
-            "Retornos negativos al principio (comisiones y costos, inversiones que todavía no maduran) y positivos más adelante, cuando se realizan las ganancias",
-            "La relación entre tasa y precio de los bonos",
-            "Un retorno constante todos los años"],
-        a: 1,
-        e: "En los primeros años pesan las comisiones y las inversiones todavía no se valorizaron, así que el retorno acumulado cae. Después, con las salidas (ventas, IPO), sube. Evaluar un fondo muy temprano induce a error."
-      },
-      {
-        q: "Los fondos inmobiliarios o de crédito privado suelen mostrar una volatilidad mucho menor que las acciones cotizadas. ¿Por qué hay que tomar ese dato con cautela?",
-        o: ["Porque no tienen riesgo de mercado",
-            "Porque se valúan con poca frecuencia y por modelo o tasación, lo que suaviza la volatilidad aparente sin que el riesgo económico sea menor",
-            "Porque están garantizados por el Estado",
-            "Porque la volatilidad no aplica a los activos reales"],
-        a: 1,
-        e: "Sin precio de mercado diario, las valuaciones trimestrales se ajustan con demora. Eso subestima la volatilidad y la correlación con los mercados cotizados: el riesgo existe aunque no se vea en la serie."
-      },
-      {
-        q: "¿Para qué inversor es más adecuada una asignación a productos no líquidos?",
-        o: ["Para quien puede necesitar el dinero en los próximos meses",
-            "Para un inversor calificado, con horizonte largo, sin necesidad de liquidez sobre esa porción y que la mantiene como una parte acotada de su cartera",
-            "Para cualquier inversor conservador, porque su volatilidad es baja",
-            "Para quien busca operar a corto plazo"],
-        a: 1,
-        e: "La iliquidez es el principal riesgo: el capital puede quedar comprometido de 5 a 10 años. Por eso se reserva para inversores que no necesitan esa liquidez, suelen tener montos mínimos altos y se usan como complemento dentro de la cartera."
-      }
-    ]
-  },
   m8: {
-    num: "8", title: "Gestión de Cartera",
+    num: "7", when: "Sábado 3/10 · 10:30 h", title: "Portafolios de Inversión",
     questions: [
       {
         q: "¿Qué cliente encaja mejor en un perfil Conservador (80% renta fija, 10% renta variable, 10% alternativos)?",
@@ -561,25 +511,25 @@ function home(){
     const r = store.get("res_"+k);
     return `<button class="mod" onclick="location.hash='${k}'">
       <span class="num">${m.num}</span>
-      <span><span class="t">Módulo ${m.num} · ${esc(m.title)}</span><span class="s" style="display:block">${m.questions.length} preguntas</span></span>
+      <span><span class="t">${esc(m.title)}</span><span class="s" style="display:block">${m.when} · ${m.questions.length} preguntas</span></span>
       ${r ? `<span class="done">${r.score}/${r.total}</span>` : ""}
     </button>`;
   }).join("");
   app.innerHTML = `<div class="fade">
     <div class="kicker">Certificación profesional en mercados financieros</div>
-    <h1>Evaluaciones por módulo</h1>
-    <p class="lead">Elegí el módulo que acabás de ver. Cada evaluación tiene 5 preguntas y ves la respuesta correcta al instante.</p>
+    <h1>Evaluaciones por tema</h1>
+    <p class="lead">Elegí el tema que acabás de ver. Cada evaluación tiene 5 preguntas y ves la respuesta correcta al instante.</p>
     <div class="mods">${items}</div></div>`;
 }
 
 function intro(key){
   const m = MODULES[key];
-  setHeader(`Módulo ${m.num} · ${m.title}`, true); setProgress(0);
+  setHeader(m.title, true); setProgress(0);
   const name = store.get("name") || "";
   app.innerHTML = `<div class="fade">
-    <div class="kicker">Módulo ${m.num}</div>
+    <div class="kicker">${m.when}</div>
     <h1>${esc(m.title)}</h1>
-    <p class="lead">Evaluación de repaso sobre los contenidos del módulo.</p>
+    <p class="lead">Evaluación de repaso sobre los contenidos del tema.</p>
     <div class="card" style="margin-top:18px">
       <div class="facts"><span><b>${m.questions.length}</b> preguntas</span><span><b>4</b> opciones cada una</span><span><b>~5</b> minutos</span></div>
       <div class="field"><label for="nm">Tu nombre y apellido</label>
@@ -651,14 +601,14 @@ function result(){
   setProgress(100);
   const msg = pct === 100 ? "¡Excelente! Respondiste todo bien."
             : pct >= 60 ? "Buen trabajo. Repasá las preguntas marcadas en rojo."
-            : "Conviene repasar los conceptos del módulo. Abajo tenés las explicaciones.";
+            : "Conviene repasar los conceptos del tema. Abajo tenés las explicaciones.";
   const review = m.questions.map((q,i) => {
     const ok = state.answers[i] === q.a;
     return `<div class="rv"><div class="h"><span class="dot ${ok?"ok":"no"}">${ok?"✓":"✕"}</span><span>${esc(q.q)}</span></div>
       <p>${ok ? "" : `Tu respuesta: ${esc(q.o[state.answers[i]])}<br>`}<b>Correcta: ${esc(q.o[q.a])}</b></p></div>`;
   }).join("");
   app.innerHTML = `<div class="fade">
-    <div class="kicker">Resultado · Módulo ${m.num}</div>
+    <div class="kicker">Resultado · ${m.when}</div>
     <h1>${esc(m.title)}</h1>
     <div class="card">
       <div class="score"><div class="ring" style="--p:${pct}"><span>${score}/${total}</span></div>
@@ -668,7 +618,7 @@ function result(){
     <div class="review">${review}</div>
     <div class="row">
       <button class="btn ghost" id="again">Reintentar</button>
-      <button class="btn" id="back">Otros módulos</button>
+      <button class="btn" id="back">Otros temas</button>
     </div></div>`;
   document.getElementById("again").onclick = () => { state = { key: state.key, i: 0, answers: [], name: state.name }; window.scrollTo(0,0); question(); };
   document.getElementById("back").onclick = () => { location.hash = ""; };

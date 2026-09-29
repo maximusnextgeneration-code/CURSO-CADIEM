@@ -1,22 +1,31 @@
-"""Genera un QR por módulo apuntando a la evaluación publicada.
+"""Genera los QR de las evaluaciones publicadas.
 
-Uso:  python generar_qr.py https://TU-SITIO/evaluaciones/
-Crea qr_modulo_1.png ... qr_modulo_8.png en esta carpeta.
+Uso:  python generar_qr.py https://usuario.github.io/CURSO-CADIEM/
+Crea qr_general.png (lista de temas) y un qr_<tema>.png por evaluación.
 Requiere: pip install "qrcode[pil]"
 """
 import sys, os
 import qrcode
 from qrcode.constants import ERROR_CORRECT_M
 
+TEMAS = {  # clave de la URL (#mN) -> nombre de archivo
+    "m1": "economia_y_mercados", "m3": "bonos", "m4": "fondos_mutuos", "m2": "acciones",
+    "m5": "etfs", "m6": "productos_estructurados", "m8": "portafolios_de_inversion",
+}
+
 if len(sys.argv) < 2:
-    sys.exit("Pasá la URL base donde publicaste index.html, p. ej.: python generar_qr.py https://midominio.github.io/cadiem/")
+    sys.exit("Pasá la URL publicada, p. ej.: python generar_qr.py https://usuario.github.io/CURSO-CADIEM/")
 base = sys.argv[1].split("#")[0]
 here = os.path.dirname(os.path.abspath(__file__))
-for m in ("1", "2", "3", "4", "5", "6", "7", "8"):
-    url = f"{base}#m{m}"
+out_dir = os.path.join(here, "qr"); os.makedirs(out_dir, exist_ok=True)
+
+def make(url, name):
     qr = qrcode.QRCode(error_correction=ERROR_CORRECT_M, box_size=20, border=2)
     qr.add_data(url); qr.make(fit=True)
-    img = qr.make_image(fill_color="#0c2e4e", back_color="white")
-    out = os.path.join(here, f"qr_modulo_{m}.png")
-    img.save(out)
-    print(out, "->", url)
+    path = os.path.join(out_dir, f"qr_{name}.png")
+    qr.make_image(fill_color="#0c2e4e", back_color="white").save(path)
+    print(path, "->", url)
+
+make(base, "general")
+for key, name in TEMAS.items():
+    make(f"{base}#{key}", name)
