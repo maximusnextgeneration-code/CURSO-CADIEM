@@ -138,6 +138,15 @@ input:focus{outline:none;border-color:var(--lcu-sky);box-shadow:0 0 0 3px var(--
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
 .row .btn{margin-top:0}
 
+/* Envío del resultado */
+.note{font-size:12px;line-height:1.55;color:var(--lcu-gray-4);margin-top:12px}
+.note.err{color:var(--no)}
+.send .lab-row b,.sent b{display:block;font-size:15px;font-weight:600;color:var(--lcu-navy)}
+.send .lab-row span,.sent span{display:block;font-size:13px;color:var(--lcu-gray-4);margin-top:2px}
+.send .btn{margin-top:14px}
+.sent{display:flex;gap:12px;align-items:flex-start}
+.sent svg{flex-shrink:0;margin-top:1px}
+
 footer{border-top:1px solid var(--lcu-gray-1);padding:18px 0 calc(18px + env(safe-area-inset-bottom))}
 footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:10px;color:var(--lcu-gray-4)}
 footer .claim{font-weight:300;font-size:12px;color:var(--lcu-navy)}
@@ -522,11 +531,15 @@ const MODULES = {
 
 const LETTERS = ["A","B","C","D"];
 const ICON = {
+  send:  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>',
   arrow: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
   back:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
   ok:    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2e7d5b" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>',
   no:    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b4443c" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg>'
 };
+/* URL de la aplicación web (Apps Script) de la planilla de resultados de cursocadiem@gmail.com */
+const SHEET_URL = "";
+
 const app = document.getElementById("app");
 const bar = document.getElementById("bar"), barFill = document.getElementById("barFill");
 const topRight = document.getElementById("topRight");
@@ -535,6 +548,7 @@ const store = {
   get(k){ try{ return JSON.parse(localStorage.getItem("cadiem_eval_"+k)); }catch(e){ return null; } },
   set(k,v){ try{ localStorage.setItem("cadiem_eval_"+k, JSON.stringify(v)); }catch(e){} }
 };
+const validEmail = s => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(s).trim());
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let state = null;
 
@@ -573,7 +587,7 @@ function home(){
 function intro(key){
   const m = MODULES[key];
   setTop(false); setProgress(null);
-  const name = store.get("name") || "";
+  const name = store.get("name") || "", email = store.get("email") || "";
   app.innerHTML = `<section class="intro fade"><div class="wrap">
     <div class="eyebrow">Evaluación · Tema ${String(m.num).padStart(2,"0")}</div>
     <h1 class="h1" style="margin-top:10px">${titleHTML(m.title)}</h1>
@@ -582,16 +596,20 @@ function intro(key){
       <div class="facts"><div><b>${m.questions.length}</b><span>Preguntas</span></div><div><b>1</b><span>Intento</span></div><div><b>~5</b><span>Minutos</span></div></div>
       <label class="lab" for="nm">Nombre y apellido</label>
       <input id="nm" autocomplete="name" placeholder="Ej.: María Pérez" value="${esc(name)}">
+      <label class="lab" for="em" style="margin-top:16px">Email</label>
+      <input id="em" type="email" inputmode="email" autocomplete="email" placeholder="nombre@empresa.com" value="${esc(email)}">
+      <p class="note">Tu resultado se registra para la certificación del curso. Hay un solo intento por tema.</p>
       <button class="btn" id="go">Comenzar ${ICON.arrow}</button>
     </div>
   </div></section>`;
-  const nm = document.getElementById("nm"), go = document.getElementById("go");
-  const check = () => go.disabled = nm.value.trim().length < 2;
-  nm.addEventListener("input", check); check();
-  nm.addEventListener("keydown", e => { if (e.key === "Enter" && !go.disabled) go.click(); });
+  const nm = document.getElementById("nm"), em = document.getElementById("em"), go = document.getElementById("go");
+  const check = () => go.disabled = nm.value.trim().length < 3 || !validEmail(em.value);
+  [nm, em].forEach(i => { i.addEventListener("input", check); i.addEventListener("keydown", e => { if (e.key === "Enter" && !go.disabled) go.click(); }); });
+  check();
   go.onclick = () => {
-    store.set("name", nm.value.trim());
-    state = { key, i: 0, answers: [], name: nm.value.trim() };
+    const n = nm.value.trim(), e = em.value.trim().toLowerCase();
+    store.set("name", n); store.set("email", e);
+    state = { key, i: 0, answers: [], name: n, email: e };
     question();
   };
 }
@@ -655,7 +673,7 @@ function result(){
   const pct = Math.round(score / total * 100);
   const now = new Date();
   const when = now.toLocaleDateString("es-UY") + " · " + now.toLocaleTimeString("es-UY", {hour:"2-digit", minute:"2-digit"});
-  const rec = state.saved || { score, total, when, answers: state.answers, name: state.name };
+  const rec = state.saved || { score, total, when, answers: state.answers, name: state.name, email: state.email, id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8), sent: false };
   if (!state.saved) store.set("res_"+state.key, rec);
   setProgress(null);
   const msg = pct === 100 ? "Todas las respuestas correctas."
@@ -671,12 +689,42 @@ function result(){
       <div class="eyebrow">Resultado · ${esc(m.title)}</div>
       <div class="big">${score}/${total}<span class="unit">${pct}%</span></div>
       <p class="msg">${msg}</p>
-      <div class="who"><b>${esc(rec.name)}</b> · ${rec.when}</div>
+      <div class="who"><b>${esc(rec.name)}</b>${rec.email ? " · " + esc(rec.email) : ""} · ${rec.when}</div>
     </div></section>
     <section class="result"><div class="wrap">
-      <div class="eyebrow rv-head">Revisión de respuestas</div>
+      <div class="send card" id="sendBox"></div>
+      <div class="eyebrow rv-head" style="margin-top:28px">Revisión de respuestas</div>
       <div class="review">${review}</div>
     </div></section></div>`;
+  renderSend(rec, m, score, pct);
+}
+
+/* Envío del resultado a la planilla de la coordinación del curso */
+function renderSend(rec, m, score, pct){
+  const box = document.getElementById("sendBox");
+  if (!SHEET_URL) { box.remove(); return; }
+  if (rec.sent) {
+    box.innerHTML = `<div class="sent">${ICON.ok}<div><b>Resultado enviado</b><span>Quedó registrado para la certificación del curso.</span></div></div>`;
+    return;
+  }
+  box.innerHTML = `<div class="lab-row"><b>Registrá tu resultado</b><span>Se envía a la coordinación del curso para la certificación.</span></div>
+    <button class="btn" id="sendBtn">${ICON.send}Enviar resultado</button><p class="note err" id="sendErr" hidden></p>`;
+  const btn = document.getElementById("sendBtn"), err = document.getElementById("sendErr");
+  btn.onclick = async () => {
+    btn.disabled = true; btn.textContent = "Enviando…"; err.hidden = true;
+    const payload = {
+      id: rec.id, nombre: rec.name, email: rec.email, tema: m.title,
+      correctas: score, total: m.questions.length, porcentaje: pct,
+      detalle: m.questions.map((q,i) => `${i+1}. ${rec.answers[i] === q.a ? "Correcta" : "Incorrecta"}`).join(" · ")
+    };
+    try {
+      await fetch(SHEET_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
+      rec.sent = true; store.set("res_"+state.key, rec); renderSend(rec, m, score, pct);
+    } catch (e) {
+      btn.disabled = false; btn.innerHTML = ICON.send + "Reintentar envío";
+      err.textContent = "No se pudo enviar. Revisá la conexión a internet y volvé a intentar."; err.hidden = false;
+    }
+  };
 }
 
 route();
