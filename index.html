@@ -541,7 +541,10 @@ let state = null;
 function route(){
   const key = location.hash.replace("#","").toLowerCase();
   window.scrollTo(0,0);
-  if (MODULES[key]) intro(key); else home();
+  if (!MODULES[key]) return home();
+  const saved = store.get("res_"+key);
+  if (saved && saved.answers) { state = { key, answers: saved.answers, name: saved.name, saved }; result(); }
+  else intro(key);
 }
 window.addEventListener("hashchange", route);
 
@@ -555,39 +558,28 @@ function setProgress(p){
   if (p !== null) barFill.style.width = p + "%";
 }
 
+/* Sin tema en la URL no se listan los temas, para no anticipar las evaluaciones */
 function home(){
   setTop(false); setProgress(null);
-  const items = Object.entries(MODULES).map(([k,m]) => {
-    const r = store.get("res_"+k);
-    return `<button class="item" onclick="location.hash='${k}'">
-      <span class="n">${String(m.num).padStart(2,"0")}</span>
-      <span><span class="t">${esc(m.title)}</span><span class="s">${m.questions.length} preguntas</span></span>
-      ${r ? `<span class="done">${r.score}/${r.total}</span>` : `<span class="go">${ICON.arrow}</span>`}
-    </button>`;
-  }).join("");
   app.innerHTML = `<div class="fade">
     <section class="cover"><div class="wrap">
       <div class="eyebrow">Certificación profesional en mercados financieros</div>
       <h1 class="h1">Evaluaciones de <strong>repaso</strong></h1>
       <hr class="rule">
-      <p class="lead">Cinco preguntas por tema, con la respuesta correcta y su explicación al instante.</p>
-    </div></section>
-    <section class="section"><div class="wrap">
-      <div class="eyebrow" style="margin-bottom:14px">Temas del curso</div>
-      <div class="list">${items}</div>
+      <p class="lead">Cada evaluación se habilita al final de su tema. Escaneá el código QR que aparece en la última slide de la presentación.</p>
     </div></section></div>`;
 }
 
 function intro(key){
   const m = MODULES[key];
-  setTop(true); setProgress(null);
+  setTop(false); setProgress(null);
   const name = store.get("name") || "";
   app.innerHTML = `<section class="intro fade"><div class="wrap">
     <div class="eyebrow">Evaluación · Tema ${String(m.num).padStart(2,"0")}</div>
     <h1 class="h1" style="margin-top:10px">${titleHTML(m.title)}</h1>
     <hr class="rule">
     <div class="card">
-      <div class="facts"><div><b>${m.questions.length}</b><span>Preguntas</span></div><div><b>4</b><span>Opciones</span></div><div><b>~5</b><span>Minutos</span></div></div>
+      <div class="facts"><div><b>${m.questions.length}</b><span>Preguntas</span></div><div><b>1</b><span>Intento</span></div><div><b>~5</b><span>Minutos</span></div></div>
       <label class="lab" for="nm">Nombre y apellido</label>
       <input id="nm" autocomplete="name" placeholder="Ej.: María Pérez" value="${esc(name)}">
       <button class="btn" id="go">Comenzar ${ICON.arrow}</button>
@@ -663,7 +655,8 @@ function result(){
   const pct = Math.round(score / total * 100);
   const now = new Date();
   const when = now.toLocaleDateString("es-UY") + " · " + now.toLocaleTimeString("es-UY", {hour:"2-digit", minute:"2-digit"});
-  store.set("res_"+state.key, { score, total, when });
+  const rec = state.saved || { score, total, when, answers: state.answers, name: state.name };
+  if (!state.saved) store.set("res_"+state.key, rec);
   setProgress(null);
   const msg = pct === 100 ? "Todas las respuestas correctas."
             : pct >= 60 ? "Buen resultado. Abajo están las explicaciones de las preguntas a repasar."
@@ -678,18 +671,12 @@ function result(){
       <div class="eyebrow">Resultado · ${esc(m.title)}</div>
       <div class="big">${score}/${total}<span class="unit">${pct}%</span></div>
       <p class="msg">${msg}</p>
-      <div class="who"><b>${esc(state.name)}</b> · ${when}</div>
+      <div class="who"><b>${esc(rec.name)}</b> · ${rec.when}</div>
     </div></section>
     <section class="result"><div class="wrap">
       <div class="eyebrow rv-head">Revisión de respuestas</div>
       <div class="review">${review}</div>
-      <div class="row">
-        <button class="btn ghost" id="again">Reintentar</button>
-        <button class="btn" id="back">Otros temas</button>
-      </div>
     </div></section></div>`;
-  document.getElementById("again").onclick = () => { state = { key: state.key, i: 0, answers: [], name: state.name }; window.scrollTo(0,0); question(); };
-  document.getElementById("back").onclick = () => { location.hash = ""; };
 }
 
 route();

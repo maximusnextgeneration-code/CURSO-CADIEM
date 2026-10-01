@@ -8,4 +8,4 @@ Página única, sin dependencias. Siete temas, ordenados según la agenda. Cada 
 
 Para regenerar los QR: `python generar_qr.py <URL publicada>`
 
-Los QR están en `qr/`: `qr_general.png` abre la lista de temas y hay uno por tema.
+Los QR están en `qr/`, uno por tema. La dirección sin `#` no lista los temas: cada evaluación se abre solo desde su QR, con un intento por persona.

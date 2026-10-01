@@ -1,7 +1,7 @@
 """Genera los QR de las evaluaciones publicadas.
 
 Uso:  python generar_qr.py https://usuario.github.io/CURSO-CADIEM/
-Crea qr_general.png (lista de temas) y un qr_<tema>.png por evaluación.
+Crea un qr_<tema>.png por evaluación.
 Requiere: pip install "qrcode[pil]"
 """
 import sys, os
@@ -26,6 +26,6 @@ def make(url, name):
     qr.make_image(fill_color="#0c2e4e", back_color="white").save(path)
     print(path, "->", url)
 
-make(base, "general")
+
 for key, name in TEMAS.items():
     make(f"{base}#{key}", name)
